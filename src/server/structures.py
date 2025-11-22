@@ -1,3 +1,19 @@
+class Player():
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+        
+class Quiz():
+    def __init__(self):
+        self.head = None
+
+    def add_question(self, question):
+        if not quiestion: return
+        if not self.head: 
+            self.head = question
+            return 
+        
+
 class Question():
     def __init__(self, text, answers, right, timer = 0):
         self.text = text # Question text that will be displayed to players
@@ -10,4 +26,7 @@ class Room():
         self.id = id
         self.creator = creator
         self.questions = questions
-        self.players=[]
+        self.players = []
+
+    def get_score(self):
+        pass
