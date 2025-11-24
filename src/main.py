@@ -1,5 +1,3 @@
-import os
-import sqlite3
 
 def demo():
     import logging
@@ -43,8 +41,9 @@ def demo():
     logger.debug('done')
     server.socket.close()
 
-
-if __name__ == '__main__':
+def db_demo():
+    import os
+    import sqlite3
 
     db_path = "tutorial.db"
     if os.path.exists(db_path):
@@ -53,12 +52,12 @@ if __name__ == '__main__':
 
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
-    cursor.execute("create table movie(title, year, score)")
-    cursor.execute("""
-INSERT INTO movie VALUES
-    ('Monty Python and the Holy Grail', 1975, 8.2),
-    ('And Now for Something Completely Different', 1971, 7.5)
-""")
+    q = cursor.execute("create table movie(title, year, score)")
+    print(q.fetchone())
+    cursor.execute("""INSERT INTO movie VALUES
+        ('Monty Python and the Holy Grail', 1975, 8.2),
+        ('And Now for Something Completely Different', 1971, 7.5)
+    """)
     connection.commit()
 
     data = [
@@ -81,6 +80,33 @@ INSERT INTO movie VALUES
     print(f'The highest scoring Monty Python movie is {title!r}, released in {year}')
     new_con.close()
 
+if __name__ == '__main__':
+    from db import DBConnector
+
+    dbcon = DBConnector("quiz0.db")
+
+    test_player = {"name": "test_add_player", "color": 3}
+    dbcon.add_player(test_player, "qwerty12")
+
+    test_quiz0 = {
+            "name": "Title of my test Quiz0!",
+            "author": test_player,
+            "questions": [
+                {
+                    "text": "First questions to players",
+                    "answers": ["answer_one", "answer_two", "correct_answer", "answer_four"],
+                    "correct": 2
+                },
+                {
+                    "text": "Second questions to players",
+                    "answers": ["correct_answer", "answer_two", "answer_three", "answer_four"],
+                    "correct": 0
+                },
+
+            ]
+        }
+
+    dbcon.add_quiz0(test_quiz0)
     # Select quiz by number
     # get question
     # give ansver
