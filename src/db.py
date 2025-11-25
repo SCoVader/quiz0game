@@ -7,7 +7,7 @@ class DBConnector():
 
     def add_player(self, player, password):
         passwd = hash(password)
-        self.cursor.execute("INSERT INTO players VALUES (?, ?, ?)", (player['name'], passwd, player['color']))
+        self.cursor.execute("INSERT INTO players(name, pass, color) VALUES (?, ?, ?)", (player['name'], passwd, player['color']))
         self.connection.commit()
         return
 
@@ -39,24 +39,26 @@ class DBConnector():
         return result.fetchone()
 
     def get_quiz0_id(self, quiz0_name):
-        result = self.cursor.execute("SELECT id FROM players WHERE name IS ?", (quiz0_name))
+        print(quiz0_name)
+        result = self.cursor.execute("SELECT id FROM players WHERE name IS (?)", (quiz0_name,))
         return result.fetchone()
 
     def get_question_id(self, question_text):
-        result = self.cursor.execute("SELECT id FROM players WHERE name IS ?", (question_text))
+        result = self.cursor.execute("SELECT id FROM players WHERE name IS (?)", (question_text,))
         return result.fetchone()
 
     def add_quiz0(self, quiz0):
         author_id = self.get_player_id(quiz0["author"])
-        self.cursor.execute("INSERT INTO quiz0s VALUES (?, ?)", (quiz0["name"], author_id))
+        
+        self.cursor.execute("INSERT INTO quiz0s(name, author) VALUES (?, ?)", (quiz0["name"], author_id[0]))
         self.connection.commit()
         quiz0_id = self.get_quiz0_id(quiz0["name"])
         for question in quiz0["questions"]:
-            self.cursor.execute("INSERT INTO questions VALUES(?, ?)", (quiz0_id, question["text"]))
+            self.cursor.execute("INSERT INTO question(quiz0_id, text) VALUES(?, ?)", (quiz0_id, question["text"]))
             self.connection.commit()
             question_id = self.get_question_id(question["text"])
             for idx, answer in enumerate(question["answers"]):
-                self.cursor.execute("INSERT INTO questions VALUES(?, ?, ?)", (question_id, answer["text"], 1 if idx == answer["correct"] else 0))
+                self.cursor.execute("INSERT INTO answer(question_id, text, is_correct) VALUES(?, ?, ?)", (question_id, answer, 1 if idx == question["correct"] else 0))
                 self.connection.commit()
 
             
