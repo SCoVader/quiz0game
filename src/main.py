@@ -42,6 +42,7 @@ def demo():
     server.socket.close()
 
 def db_demo():
+
     import os
     import sqlite3
 
@@ -80,13 +81,13 @@ def db_demo():
     print(f'The highest scoring Monty Python movie is {title!r}, released in {year}')
     new_con.close()
 
-if __name__ == '__main__':
+def dbconn_demo():
     from db import DBConnector
 
     dbcon = DBConnector("quiz0.db")
 
     test_player = {"name": "test_add_player", "color": 3}
-    dbcon.add_player(test_player, "qwerty12")
+    dbcon.add_player(test_player, "qwerty20")
 
     test_quiz0 = {
             "name": "Title of my test Quiz0!",
@@ -105,8 +106,13 @@ if __name__ == '__main__':
 
             ]
         }
-
     dbcon.add_quiz0(test_quiz0)
+    dbcon.close()
+
+if __name__ == '__main__':
+    # Register/Login
+    # Create Quiz
+    
     # Select quiz by number
     # get question
     # give ansver

@@ -10,6 +10,11 @@ class Quiz0Server(socketserver.TCPServer):
         super().__init__(self, server_address, handler_class)
         return
 
+    def server_bind(self):
+        self.logger.debug('server_bind')
+        super().server_bind()
+        return
+
     def server_activate(self):
         self.logger.debug('server_activate')
         super().server_activate(self)
